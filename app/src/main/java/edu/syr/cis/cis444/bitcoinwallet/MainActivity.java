@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.bitcoinj.core.Wallet;
+
 
 public class MainActivity extends Activity {
 
