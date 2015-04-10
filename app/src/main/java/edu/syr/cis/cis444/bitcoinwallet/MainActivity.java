@@ -2,6 +2,7 @@ package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,9 +11,13 @@ import org.bitcoinj.core.Wallet;
 
 public class MainActivity extends Activity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "creating btcService...");
+        BitcoinService btcService = new BitcoinService();
         setContentView(R.layout.activity_main);
     }
 
