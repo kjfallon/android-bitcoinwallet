@@ -24,7 +24,10 @@ dependencies {
     compile 'org.bitcoinj:bitcoinj-core:0.12.3@jar'
     compile 'org.bitcoinj:bitcoinj-tools:0.12.3@jar'
 
-    compile 'com.madgag:sc-light-jdk15on:1.47.0.3'
+    compile 'org.slf4j:slf4j-api:1.7.9'
+    compile 'org.slf4j:slf4j-android:1.7.9'
+    //compile 'com.madgag:sc-light-jdk15on:1.47.0.3'
+    compile 'com.madgag.spongycastle:core:1.51.0.0'
     compile 'com.google.guava:guava:16.0.1'
     compile 'com.google.protobuf:protobuf-java:2.5.0'
     compile 'net.jcip:jcip-annotations:1.0'

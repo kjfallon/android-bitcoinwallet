@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "creating btcService...");
         BitcoinService btcService = new BitcoinService();
+        Log.d(TAG, "completed creating btcService");
         setContentView(R.layout.activity_main);
     }
 
