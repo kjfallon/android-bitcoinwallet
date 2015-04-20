@@ -14,6 +14,7 @@ import org.bitcoinj.utils.BriefLogFormatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class BitcoinService {
 
@@ -60,6 +61,9 @@ public class BitcoinService {
                 e.printStackTrace();
             }
         }
+
+        // specify this wallet should be autosaved as needed
+        this.wallet.autosaveToFile(this.walletFile, 200, TimeUnit.MILLISECONDS, null);
 
         Log.d(TAG, "Listing keys in wallet");
         Log.d(TAG, "Number of keys in wallet: " + this.wallet.getKeychainSize());

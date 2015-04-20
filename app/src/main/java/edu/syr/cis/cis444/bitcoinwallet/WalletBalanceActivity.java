@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import org.bitcoinj.core.Coin;
+
 
 public class WalletBalanceActivity extends Activity {
 
@@ -24,9 +26,8 @@ public class WalletBalanceActivity extends Activity {
         setContentView(R.layout.activity_wallet_balance);
         TextView walletView = (TextView) findViewById(R.id.textViewWalletBalance);
         Log.d(TAG, "displaying wallet content");
-        walletView.setText("wallet" + btcService.wallet);
+        walletView.setText("Wallet Ballance: " + btcService.wallet.getBalance());
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
