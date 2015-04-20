@@ -1,18 +1,30 @@
 package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 
 public class WalletBalanceActivity extends Activity {
 
+    private static final String TAG = WalletBalanceActivity.class.getSimpleName();
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+        Log.d(TAG, "creating btcService...");
+        BitcoinService btcService = new BitcoinService(context);
         setContentView(R.layout.activity_wallet_balance);
+        TextView walletView = (TextView) findViewById(R.id.textViewWalletBalance);
+        Log.d(TAG, "displaying wallet content");
+        walletView.setText("wallet" + btcService.wallet);
     }
 
 

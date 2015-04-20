@@ -15,4 +15,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:onClick="mainMenu" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="---"
+        android:id="@+id/textViewWalletBalance"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="30dp" />
+
 </RelativeLayout>
