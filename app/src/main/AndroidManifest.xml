@@ -24,6 +24,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.syr.cis.cis444.bitcoinwallet.MainActivity" />
         </activity>
+        <activity
+            android:name=".ViewAddressesActivity"
+            android:label="@string/title_activity_view_addresses"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.syr.cis.cis444.bitcoinwallet.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SendBtcActivity"
+            android:label="@string/title_activity_send_btc"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.syr.cis.cis444.bitcoinwallet.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ReceiveBtcActivity"
+            android:label="@string/title_activity_receive_btc"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.syr.cis.cis444.bitcoinwallet.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

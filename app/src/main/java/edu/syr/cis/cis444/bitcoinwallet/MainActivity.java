@@ -55,4 +55,23 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, WalletBalanceActivity.class);
         startActivity(intent);
     }
+
+    /** Called when the user clicks the View Addresses button */
+    public void viewAddresses(View view) {
+        Intent intent = new Intent(this, ViewAddressesActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user clicks the Send BTC button */
+    public void sendBtc(View view) {
+        Intent intent = new Intent(this, SendBtcActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user clicks the Recieve BTC button */
+    public void receiveBtc(View view) {
+        Intent intent = new Intent(this, ReceiveBtcActivity.class);
+        startActivity(intent);
+    }
+
 }
