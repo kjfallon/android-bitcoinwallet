@@ -15,9 +15,6 @@ import org.bitcoinj.utils.BriefLogFormatter;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by kelly on 4/9/15.
- */
 public class BitcoinService {
 
     private static final String TAG = BitcoinService.class.getSimpleName();

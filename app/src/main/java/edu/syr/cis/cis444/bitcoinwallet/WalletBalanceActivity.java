@@ -1,37 +1,25 @@
 package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.bitcoinj.core.Wallet;
 
-
-public class MainActivity extends Activity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
-    public static Context context;
+public class WalletBalanceActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
-        Log.d(TAG, "creating btcService...");
-        BitcoinService btcService = new BitcoinService(context);
-        Log.d(TAG, "completed creating btcService");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_wallet_balance);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_wallet_balance, menu);
         return true;
     }
 
@@ -50,9 +38,9 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user clicks the Wallet Balance button */
-    public void viewWalletBalance(View view) {
-        Intent intent = new Intent(this, WalletBalanceActivity.class);
-        startActivity(intent);
+    /** Called when the user clicks the Main Menu button */
+    public void mainMenu(View view) {
+        finish();
     }
+
 }
