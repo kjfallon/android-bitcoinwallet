@@ -1,77 +1,89 @@
 package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-
-import org.bitcoinj.core.Wallet;
+import android.view.ViewGroup;
 
 
 public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static Context context;
+    public BitcoinService btcService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         Log.d(TAG, "creating btcService...");
-        BitcoinService btcService = new BitcoinService(context);
+        btcService = new BitcoinService(context);
         Log.d(TAG, "completed creating btcService");
         setContentView(R.layout.activity_main);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        /** Adds the placeholder fragment (containing buttons) to the activity **/
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    /** Called in fragments to access the btcService created above. you can use
+     * ((MainActivity)this.getActivity()).getBTCService() to access object from fragments **/
+    public BitcoinService getBTCService(){
+        return btcService;
     }
 
     /** Called when the user clicks the Wallet Balance button */
     public void viewWalletBalance(View view) {
-        Intent intent = new Intent(this, WalletBalanceActivity.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new WalletBalanceFragment())
+                .commit();
     }
 
     /** Called when the user clicks the View Addresses button */
     public void viewAddresses(View view) {
-        Intent intent = new Intent(this, ViewAddressesActivity.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new ViewAddressesFragment())
+                .commit();
     }
 
     /** Called when the user clicks the Send BTC button */
     public void sendBtc(View view) {
-        Intent intent = new Intent(this, SendBtcActivity.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new SendBtcFragment())
+                .commit();
     }
 
     /** Called when the user clicks the Recieve BTC button */
     public void receiveBtc(View view) {
-        Intent intent = new Intent(this, ReceiveBtcActivity.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new ReceiveBtcFragment())
+                .commit();
+    }
+
+    /** Called when user clicks Main Menu button in any of the fragments **/
+    public void mainMenu(View view) {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new PlaceholderFragment())
+                .commit();
+    }
+
+    /** Exists as placeholder to display the main menu UI **/
+    public static class PlaceholderFragment extends Fragment {
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_main_activity, container, false);
+        }
     }
 
 }

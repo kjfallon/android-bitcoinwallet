@@ -13,4 +13,5 @@
     <string name="title_activity_view_addresses">View Addresses</string>
     <string name="title_activity_send_btc">Send BTC</string>
     <string name="title_activity_receive_btc">Receive BTC</string>
+    <string name="title_activity_main_activity2">MainActivity2Activity</string>
 </resources>
