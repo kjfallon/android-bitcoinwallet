@@ -9,6 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.syr.cis.cis444.bitcoinwallet.fragment.ReceiveBtcFragment;
+import edu.syr.cis.cis444.bitcoinwallet.fragment.SendBtcFragment;
+import edu.syr.cis.cis444.bitcoinwallet.fragment.ViewAddressesFragment;
+import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletBalanceFragment;
+
 
 public class MainActivity extends Activity {
 
@@ -31,6 +36,20 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "registering main activity on the event bus");
+        OttoEventBus.getInstance().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "registering main activity on the event bus");
+        OttoEventBus.getInstance().unregister(this);
     }
 
     /** Called in fragments to access the btcService created above. you can use

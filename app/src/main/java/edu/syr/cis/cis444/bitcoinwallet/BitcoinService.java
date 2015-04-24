@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Wallet;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.store.UnreadableWalletException;
-import org.bitcoinj.utils.BriefLogFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,4 +92,11 @@ public class BitcoinService {
         Log.d(TAG, "key address on " + btcNetwork + " blockchain is " + address);
     }
 
+    public Coin getBalance() {
+        return this.wallet.getBalance();
+    }
+
+    public Address freshReceiveAddress() {
+        return this.wallet.freshReceiveAddress();
+    }
 }
