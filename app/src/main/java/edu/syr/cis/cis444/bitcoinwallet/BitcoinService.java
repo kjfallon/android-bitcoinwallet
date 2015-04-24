@@ -3,13 +3,20 @@ package edu.syr.cis.cis444.bitcoinwallet;
 import android.content.Context;
 import android.util.Log;
 
+import org.bitcoinj.core.AbstractWalletEventListener;
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.BlockChain;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.PeerGroup;
+import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.Wallet;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.store.BlockStore;
+import org.bitcoinj.store.BlockStoreException;
+import org.bitcoinj.store.SPVBlockStore;
 import org.bitcoinj.store.UnreadableWalletException;
 
 import java.io.File;
@@ -23,10 +30,13 @@ public class BitcoinService {
     NetworkParameters btcNetParams;
 
     File walletFile = null;
+    File spvBlockChainFile = null;
     Wallet wallet = null;
+    Context context = null;
 
     // Default constructor
     public BitcoinService(Context context) {
+        this.context = context;
         if (btcNetwork.equalsIgnoreCase("test"))
             btcNetParams = TestNet3Params.get();
         else if (btcNetwork.equalsIgnoreCase("prod"))
@@ -74,6 +84,43 @@ public class BitcoinService {
         //}
         Log.d(TAG, "wallet contents: " + this.wallet);
 
+    }
+
+    public void updateWalletFromNetwork() {
+
+        spvBlockChainFile = new File(context.getFilesDir(), "spvBlockChainFile.dat");
+        BlockStore blockStore = null;
+        BlockChain chain = null;
+        try {
+            blockStore = new SPVBlockStore(btcNetParams, spvBlockChainFile);
+            chain = new BlockChain(btcNetParams, this.wallet, blockStore);
+        } catch (BlockStoreException e) {
+            e.printStackTrace();
+        }
+
+        final PeerGroup peerGroup = new PeerGroup(btcNetParams, chain);
+        peerGroup.startAsync();
+        this.wallet.addEventListener(new AbstractWalletEventListener() {
+            @Override
+            public synchronized void onCoinsReceived(Wallet w, Transaction tx, Coin prevBalance, Coin newBalance) {
+                Log.d(TAG, "Wallet received tx " + tx.getHashAsString());
+                Log.d(TAG, "Wallet previous balance " + prevBalance);
+                Log.d(TAG, "Wallet new balance " + newBalance);
+                Log.d(TAG, tx.toString());
+            }
+        });
+
+        // start network activity of collecting relevent blocks from the blockchain
+        Log.d(TAG, "Starting download of SPV blocks from blockcain...");
+        peerGroup.downloadBlockChain();
+        Log.d(TAG, "Completed SPV block download.");
+        peerGroup.stopAsync();
+
+        try {
+            this.wallet.saveToFile(this.walletFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ECKey createKey() {

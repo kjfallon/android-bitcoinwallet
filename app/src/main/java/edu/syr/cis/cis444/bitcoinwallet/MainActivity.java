@@ -36,6 +36,9 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        Log.d(TAG, "starting to update wallet from blockchain...");
+        btcService.updateWalletFromNetwork();
+        Log.d(TAG, "completed updating wallet from blockchain");
     }
 
     @Override
