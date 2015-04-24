@@ -28,7 +28,7 @@ public class ReceiveBtcFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.activity_receive_btc, container, false);
+        View view = inflater.inflate(R.layout.fragment_receive_btc, container, false);
 
         TextView receiveAddrView = (TextView) view.findViewById(R.id.textViewFreshReceiveAddress);
         Log.d(TAG, "displaying fresh address as text");

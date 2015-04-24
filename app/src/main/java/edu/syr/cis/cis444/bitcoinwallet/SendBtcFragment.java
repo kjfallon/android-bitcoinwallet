@@ -14,7 +14,7 @@ public class SendBtcFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.activity_send_btc, container, false);
+        View view = inflater.inflate(R.layout.fragment_send_btc, container, false);
         return view;
     }
 

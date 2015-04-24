@@ -17,10 +17,10 @@ public class WalletBalanceFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.activity_wallet_balance, container, false);
+        View view = inflater.inflate(R.layout.fragment_wallet_balance, container, false);
         TextView walletView = (TextView) view.findViewById(R.id.textViewWalletBalance);
         Log.d(TAG, "displaying wallet content");
-        walletView.setText("Wallet Ballance: " + ((MainActivity)this.getActivity()).getBTCService().wallet.getBalance());
+        walletView.setText("Wallet Balance: " + ((MainActivity)this.getActivity()).getBTCService().wallet.getBalance() + " btc");
         return view;
     }
 

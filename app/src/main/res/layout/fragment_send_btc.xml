@@ -4,16 +4,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.syr.cis.cis444.bitcoinwallet.ViewAddressesActivity">
+    tools:context="edu.syr.cis.cis444.bitcoinwallet.SendBtcFragment">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_main_menu"
-        android:id="@+id/button8"
+        android:id="@+id/button7"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="26dp"
-        android:onClick="mainMenu"/>
+        android:layout_marginBottom="30dp"
+        android:onClick="mainMenu" />
 
 </RelativeLayout>
