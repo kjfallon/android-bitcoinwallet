@@ -2,6 +2,8 @@ package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import edu.syr.cis.cis444.bitcoinwallet.fragment.ReceiveBtcFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.SendBtcFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.ViewAddressesFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletBalanceFragment;
+import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletRecoveryFragment;
 
 
 public class MainActivity extends Activity {
@@ -29,16 +32,30 @@ public class MainActivity extends Activity {
         btcService = new BitcoinService(context);
         Log.d(TAG, "completed creating btcService");
         setContentView(R.layout.activity_main);
+        String fragmentName = getIntent().getStringExtra("fragmentName");
+        Log.d(TAG, "specified fragment name is: " + fragmentName);
 
         /** Adds the placeholder fragment (containing buttons) to the activity **/
-        if (savedInstanceState == null) {
+        if ( (savedInstanceState == null) && (fragmentName == null)) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        if (fragmentName != null)
+        {
+            if (fragmentName.equals("WalletRecoveryFragment"))
+            {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new WalletRecoveryFragment())
+                        .commit();
+            }
+        }
+
         Log.d(TAG, "starting to update wallet from blockchain...");
         btcService.updateWalletFromNetwork();
         Log.d(TAG, "completed updating wallet from blockchain");
+
     }
 
     @Override

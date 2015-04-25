@@ -6,6 +6,7 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import org.bitcoinj.wallet.DeterministicSeed;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -45,12 +47,13 @@ public class BitcoinService {
     private static final String TAG = BitcoinService.class.getSimpleName();
     private String btcNetwork = "test";
     NetworkParameters btcNetParams;
-
     File walletFile = null;
     File spvBlockChainFile = null;
     Wallet wallet;
     PeerGroup peerGroup = null;
     Context context = null;
+    Random rand = new Random();
+    int notificationCounter = 1;
 
     public BitcoinService(Context context) {
         this.context = context;
@@ -119,10 +122,57 @@ public class BitcoinService {
 
         // Recovery information
         DeterministicSeed seed = createdWallet.getKeyChainSeed();
-        Log.d(TAG, "Recovery Seed words are: " + Joiner.on(" ").join(seed.getMnemonicCode()));
+        String recoverySeedWords = Joiner.on(" ").join(seed.getMnemonicCode());
+        Log.d(TAG, "Recovery Seed words are: " + recoverySeedWords);
         Log.d(TAG, "Recovery Seed birthday is: " + seed.getCreationTimeSeconds());
+        createNotification("Please back up your new wallet",
+                "Touch to view recovery mnemonic",
+                "WalletRecoveryFragment");
 
         return createdWallet;
+    }
+
+    public int createNotification (String title, String body, String fragmentName) {
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_action_important)
+                        .setContentTitle(title)
+                        .setContentText(body);
+        Intent resultIntent = new Intent(context, MainActivity.class);
+
+        //specify fragment to display
+        resultIntent.putExtra("fragmentName", fragmentName);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        int notificationId = notificationCounter;
+        notificationCounter++;
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // notificationId allows updates to notifications.
+        mNotificationManager.notify(notificationId, mBuilder.build());
+
+        return notificationId;
+    }
+
+    public int getRandomInt(int min, int max) {
+
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
     }
 
       public void updateWalletFromNetwork() {
@@ -280,6 +330,13 @@ public class BitcoinService {
 
     public Coin getBalance() {
         return this.wallet.getBalance();
+    }
+
+    public String getMnemonic() {
+        DeterministicSeed seed = wallet.getKeyChainSeed();
+        String recoverySeedWords = Joiner.on(" ").join(seed.getMnemonicCode());
+        Log.d(TAG, "Recovery Seed words are: " + recoverySeedWords);
+        return recoverySeedWords;
     }
 
     public Address freshReceiveAddress() {
