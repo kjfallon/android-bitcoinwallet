@@ -1,7 +1,13 @@
 package edu.syr.cis.cis444.bitcoinwallet;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
+
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.base.Joiner;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -42,7 +48,7 @@ public class BitcoinService {
 
     File walletFile = null;
     File spvBlockChainFile = null;
-    Wallet wallet = null;
+    Wallet wallet;
     PeerGroup peerGroup = null;
     Context context = null;
 
@@ -59,45 +65,67 @@ public class BitcoinService {
             spvBlockChainFile = new File(this.context.getFilesDir(), "ProdBitcoinSpvBlockChainFile.dat");
         }
 
-        initWallet();
+        wallet = initWallet();
     }
 
-    // load wallet from file if it exists
-    // otherwise create and save a new wallet
-    public void initWallet() {
+    public Wallet initWallet() {
 
-        Boolean successfullyLoadedWalletFromDisk = false;
-        this.wallet = new Wallet(btcNetParams);
-        if (this.walletFile.exists()) {
-            try {
-                this.wallet.loadFromFile(this.walletFile);
-                successfullyLoadedWalletFromDisk = true;
-                Log.d(TAG, "Loaded wallet file from disk");
-            } catch (UnreadableWalletException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!successfullyLoadedWalletFromDisk)  {
-            try {
-                this.wallet.saveToFile(this.walletFile);
-                Log.d(TAG, "Created new wallet");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            DeterministicSeed seed = this.wallet.getKeyChainSeed();
-            Log.d(TAG, "Recovery Seed words are: " + Joiner.on(" ").join(seed.getMnemonicCode()));
-            Log.d(TAG, "Recovery Seed birthday is: " + seed.getCreationTimeSeconds());
-        }
+        // if wallet file exists then load it otherwise create it
+        Wallet myWallet = (walletFile.exists()) ? loadWallet() : createWallet();
 
         // specify this wallet should be autosaved as needed
-        this.wallet.autosaveToFile(this.walletFile, 200, TimeUnit.MILLISECONDS, null);
-        Log.d(TAG, "wallet file name: " + this.walletFile.getName());
-        Log.d(TAG, "Number of keys in wallet: " + this.wallet.getKeychainSize());
-        Log.d(TAG, "wallet contents: " + this.wallet);
+        myWallet.autosaveToFile(walletFile, 200, TimeUnit.MILLISECONDS, null);
+        Log.d(TAG, "wallet file name: " + walletFile.getName());
+        Log.d(TAG, "Number of keys in wallet: " + myWallet.getKeychainSize());
+        Log.d(TAG, "wallet contents: " + myWallet);
 
+        return myWallet;
     }
 
-    public void updateWalletFromNetwork() {
+    public Wallet loadWallet() {
+
+        Wallet loadedWallet = null;
+        try {
+            Log.d(TAG, "existing wallet file name: " + walletFile.getName());
+            Log.d(TAG, "existing wallet file size " + walletFile.length() + "bytes");
+            loadedWallet  = Wallet.loadFromFile(walletFile);
+            Log.d(TAG, "Loaded wallet file from disk");
+            CharSequence text = "Loaded wallet";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } catch (UnreadableWalletException e) {
+            Log.e(TAG, "Could not parse existing wallet");
+            e.printStackTrace();
+        }
+
+        return loadedWallet;
+    }
+
+    public Wallet createWallet() {
+
+        Wallet createdWallet = new Wallet(btcNetParams);
+        try {
+            createdWallet.saveToFile(walletFile);
+            Log.d(TAG, "Created new wallet");
+            CharSequence text = "Created new wallet";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } catch (IOException e) {
+            Log.e(TAG, "Could not save wallet");
+            e.printStackTrace();
+        }
+
+        // Recovery information
+        DeterministicSeed seed = createdWallet.getKeyChainSeed();
+        Log.d(TAG, "Recovery Seed words are: " + Joiner.on(" ").join(seed.getMnemonicCode()));
+        Log.d(TAG, "Recovery Seed birthday is: " + seed.getCreationTimeSeconds());
+
+        return createdWallet;
+    }
+
+      public void updateWalletFromNetwork() {
 
         BlockStore blockStore = null;
         BlockChain chain = null;
