@@ -14,4 +14,6 @@
     <string name="title_activity_send_btc">Send BTC</string>
     <string name="title_activity_receive_btc">Receive BTC</string>
     <string name="title_activity_main_activity2">MainActivity2Activity</string>
+    <string name="label_send_address">Send to Address</string>
+    <string name="label_send_amount">Bitcoin amount</string>
 </resources>

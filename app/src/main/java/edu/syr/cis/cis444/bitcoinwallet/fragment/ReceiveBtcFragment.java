@@ -47,7 +47,7 @@ public class ReceiveBtcFragment extends Fragment {
         String freshAddressString = freshAddress.toString();
         receiveAddrView.setText("Send BTC to: " + freshAddressString);
 
-        Log.d(TAG, "displaying fresh address as QR code");
+        Log.d(TAG, "displaying QR for fresh address " + freshAddressString );
         // submit QR code creation task to bus
         Log.d(TAG, "submitting CreateQrTask to bus");
         createQrTask = new CreateQrTask();
