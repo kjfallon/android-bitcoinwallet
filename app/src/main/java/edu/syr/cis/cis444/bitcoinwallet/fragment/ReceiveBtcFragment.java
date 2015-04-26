@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import static android.widget.ImageView.ScaleType.CENTER_INSIDE;
 import android.widget.TextView;
@@ -30,12 +32,14 @@ import edu.syr.cis.cis444.bitcoinwallet.event.QrCodeAvailableEvent;
 import edu.syr.cis.cis444.bitcoinwallet.task.CreateQrTask;
 
 
-public class ReceiveBtcFragment extends Fragment {
+public class ReceiveBtcFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ReceiveBtcFragment.class.getSimpleName();
     public static Context context;
     private static CreateQrTask createQrTask;
     private View view;
+    EditText amountEdit;
+    String freshAddressString = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
@@ -44,8 +48,13 @@ public class ReceiveBtcFragment extends Fragment {
         TextView receiveAddrView = (TextView) view.findViewById(R.id.textViewFreshReceiveAddress);
         Log.d(TAG, "displaying fresh address as text");
         Address freshAddress = ((MainActivity)this.getActivity()).getBTCService().freshReceiveAddress();
-        String freshAddressString = freshAddress.toString();
+        freshAddressString = freshAddress.toString();
         receiveAddrView.setText("Send BTC to: " + freshAddressString);
+        amountEdit = (EditText) view.findViewById(R.id.editTextReceiveAmount);
+        amountEdit.setText("0.05");
+
+        Button sendButton = (Button) view.findViewById(R.id.buttonUpdateReceiveQR);
+        sendButton.setOnClickListener(this);
 
         Log.d(TAG, "displaying QR for fresh address " + freshAddressString );
         // submit QR code creation task to bus
@@ -54,6 +63,25 @@ public class ReceiveBtcFragment extends Fragment {
         createQrTask.execute(freshAddressString,"");
 
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buttonUpdateReceiveQR:
+                receiveAmount();
+                break;
+        }
+    }
+
+    /** Called when the user clicks the Update QR in the reveive BTC fragment*/
+    public void receiveAmount() {
+        String amount = amountEdit.getText().toString();
+        Log.d(TAG, "displaying QR for " + amount + " to " + freshAddressString );
+        // submit QR code creation task to bus
+        Log.d(TAG, "submitting CreateQrTask to bus");
+        createQrTask = new CreateQrTask();
+        createQrTask.execute(freshAddressString, amount);
     }
 
     // when a QR code availibile event is posted to the bus then display it
@@ -85,41 +113,6 @@ public class ReceiveBtcFragment extends Fragment {
             createQrTask.cancel(true);
             createQrTask = null;
         }
-    }
-
-    private String createBtcProtocolUri(String address, String btcAmount ) {
-
-        String uri = "bitcoin:" + address;
-        if (!TextUtils.isEmpty(btcAmount)) {
-            uri += "?amount=" + btcAmount;
-        }
-        return uri;
-    }
-
-    private Bitmap createQR(String freshAddress, String btcAmount) {
-
-        //IntentIntegrator integrator = new IntentIntegrator(ReceiveBtcActivity.this);
-        //integrator.shareText(createBtcProtocolUri(freshAddress, btcAmount));
-
-        // usage of xzing to generate a qr code follows combination of examples given at:
-        // http://stackoverflow.com/questions/8800919/how-to-generate-a-qr-code-for-an-android-application
-        QRCodeWriter writer = new QRCodeWriter();
-        Bitmap bmp = null;
-        try {
-            int width = 512;
-            int height = 512;
-            BitMatrix bitMatrix = writer.encode(createBtcProtocolUri(freshAddress, btcAmount), BarcodeFormat.QR_CODE, width, height);
-            bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-        } catch (WriterException e) {
-            Log.e("QR creation error", ""+e);
-        }
-
-        return bmp;
     }
 
 }
