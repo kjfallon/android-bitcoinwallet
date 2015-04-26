@@ -50,6 +50,18 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/textViewReceiveUri"
+        android:layout_below="@+id/imageViewReceiveQR"
+        android:layout_marginTop="2dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:textIsSelectable="true" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

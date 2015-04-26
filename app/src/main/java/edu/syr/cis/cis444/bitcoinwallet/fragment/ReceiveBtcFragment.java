@@ -38,8 +38,10 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
     public static Context context;
     private static CreateQrTask createQrTask;
     private View view;
+    TextView receiveUriView;
     EditText amountEdit;
     String freshAddressString = "";
+    String receiveBtcAmount = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
@@ -52,7 +54,7 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
         receiveAddrView.setText("Send BTC to: " + freshAddressString);
         amountEdit = (EditText) view.findViewById(R.id.editTextReceiveAmount);
         amountEdit.setText("0.05");
-
+        receiveUriView = (TextView) view.findViewById(R.id.textViewReceiveUri);
         Button sendButton = (Button) view.findViewById(R.id.buttonUpdateReceiveQR);
         sendButton.setOnClickListener(this);
 
@@ -76,12 +78,12 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
 
     /** Called when the user clicks the Update QR in the reveive BTC fragment*/
     public void receiveAmount() {
-        String amount = amountEdit.getText().toString();
-        Log.d(TAG, "displaying QR for " + amount + " to " + freshAddressString );
+        receiveBtcAmount = amountEdit.getText().toString();
+        Log.d(TAG, "displaying QR for " + receiveBtcAmount + " to " + freshAddressString );
         // submit QR code creation task to bus
         Log.d(TAG, "submitting CreateQrTask to bus");
         createQrTask = new CreateQrTask();
-        createQrTask.execute(freshAddressString, amount);
+        createQrTask.execute(freshAddressString, receiveBtcAmount);
     }
 
     // when a QR code availibile event is posted to the bus then display it
@@ -93,6 +95,7 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
         if (qrView != null) {
             qrView.setImageBitmap(event.bmp);
         }
+        receiveUriView.setText( ((MainActivity)this.getActivity()).getBTCService().createBtcProtocolUri(freshAddressString, receiveBtcAmount));
     }
 
     @Override

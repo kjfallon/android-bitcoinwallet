@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -345,6 +346,15 @@ public class BitcoinService {
     public void printKeyAddress(ECKey key) {
         Address address = key.toAddress(btcNetParams);
         Log.d(TAG, "key address on " + btcNetwork + " blockchain is " + address);
+    }
+
+    public String createBtcProtocolUri(String address, String btcAmount ) {
+
+        String uri = "bitcoin:" + address;
+        if (!TextUtils.isEmpty(btcAmount)) {
+            uri += "?amount=" + btcAmount;
+        }
+        return uri;
     }
 
     public Coin getBalance() {
