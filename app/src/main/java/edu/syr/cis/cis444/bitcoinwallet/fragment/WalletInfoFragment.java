@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.bitcoinj.core.Transaction;
 import org.bitcoinj.utils.BtcFormat;
+
+import java.util.List;
+import java.util.Set;
 
 import edu.syr.cis.cis444.bitcoinwallet.MainActivity;
 import edu.syr.cis.cis444.bitcoinwallet.OttoEventBus;
@@ -56,7 +60,17 @@ public class WalletInfoFragment extends Fragment {
 
         Log.d(TAG, "displaying wallet transaction count");
         TextView walletTxCount = (TextView) view.findViewById(R.id.textViewWalletTransactionCount);
-        walletTxCount.setText("Wallet tx count: " + ((MainActivity)this.getActivity()).getBTCService().getTransactions(true).size() );
+        Set<Transaction> transactions = ((MainActivity)this.getActivity()).getBTCService().getTransactions(true);
+        walletTxCount.setText("Wallet tx count: " + transactions.size() );
+
+        List<Transaction> recentTransactions = ((MainActivity)this.getActivity()).getBTCService().getRecentTransactions();
+        String transactionList = "Recent transactions:\n";
+        for (Transaction transaction : recentTransactions ) {
+            transactionList += transaction.getHashAsString() + "\n";
+        }
+        Log.d(TAG, "displaying wallet transactions");
+        TextView walletTx = (TextView) view.findViewById(R.id.textViewWalletTransactions);
+        walletTx.setText(transactionList);
 
         return view;
     }

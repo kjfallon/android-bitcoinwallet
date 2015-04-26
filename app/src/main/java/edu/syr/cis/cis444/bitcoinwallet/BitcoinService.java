@@ -38,6 +38,7 @@ import org.bitcoinj.wallet.DeterministicSeed;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -368,6 +369,10 @@ public class BitcoinService {
 
     public Set<Transaction> getTransactions(Boolean includeDead) {
         return wallet.getTransactions(includeDead);
+    }
+
+    public List<Transaction> getRecentTransactions() {
+        return wallet.getTransactionsByTime();
     }
 
     public String getMnemonic() {

@@ -29,7 +29,9 @@ public class SendBtcFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_send_btc, container, false);
         addressEdit = (EditText) view.findViewById(R.id.editTextAddress);
-        addressEdit.setText(((MainActivity) this.getActivity()).getBTCService().currentReceiveAddress().toString());
+        //addressEdit.setText(((MainActivity) this.getActivity()).getBTCService().currentReceiveAddress().toString());
+        // default to address in external test wallet
+        addressEdit.setText("mp14qMPpZuZfGezMTT9o1YF9n3aaEUz1zs");
         amountEdit = (EditText) view.findViewById(R.id.editTextAmount);
         amountEdit.setText("0.05");
 
