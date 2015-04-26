@@ -2,8 +2,6 @@ package edu.syr.cis.cis444.bitcoinwallet;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +12,7 @@ import android.view.ViewGroup;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.ReceiveBtcFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.SendBtcFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.ViewAddressesFragment;
-import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletBalanceFragment;
+import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletInfoFragment;
 import edu.syr.cis.cis444.bitcoinwallet.fragment.WalletRecoveryFragment;
 
 
@@ -53,7 +51,7 @@ public class MainActivity extends Activity {
         }
 
         Log.d(TAG, "starting to update wallet from blockchain...");
-        btcService.updateWalletFromNetwork();
+        btcService.initWalletFromNetwork();
         Log.d(TAG, "completed updating wallet from blockchain");
 
     }
@@ -81,7 +79,7 @@ public class MainActivity extends Activity {
     /** Called when the user clicks the Wallet Balance button */
     public void viewWalletBalance(View view) {
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new WalletBalanceFragment())
+                .replace(R.id.container, new WalletInfoFragment())
                 .commit();
     }
 
@@ -103,6 +101,13 @@ public class MainActivity extends Activity {
     public void receiveBtc(View view) {
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, new ReceiveBtcFragment())
+                .commit();
+    }
+
+    /** Called when the user clicks the Recovery Information button */
+    public void recoveryFragment(View view) {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new WalletRecoveryFragment())
                 .commit();
     }
 

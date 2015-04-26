@@ -39,6 +39,7 @@ import org.bitcoinj.wallet.DeterministicSeed;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -108,6 +109,7 @@ public class BitcoinService {
     public Wallet createWallet() {
 
         Wallet createdWallet = new Wallet(btcNetParams);
+        createdWallet.setDescription("CIS444 Mobile Bitcoin Wallet");
         try {
             createdWallet.saveToFile(walletFile);
             Log.d(TAG, "Created new wallet");
@@ -175,7 +177,7 @@ public class BitcoinService {
         return randomNum;
     }
 
-      public void updateWalletFromNetwork() {
+      public void initWalletFromNetwork() {
 
         BlockStore blockStore = null;
         BlockChain chain = null;
@@ -252,13 +254,29 @@ public class BitcoinService {
         Log.d(TAG, "Starting download of SPV blocks from blockcain...");
         peerGroup.downloadBlockChain();
         Log.d(TAG, "Completed SPV block download.");
-        peerGroup.stopAsync();
 
         try {
             this.wallet.saveToFile(this.walletFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateWalletFromNetwork() {
+
+        Log.d(TAG, "Updating the wallet from the network");
+        if (!peerGroup.isRunning()) peerGroup.startAsync();
+        Log.d(TAG, "Starting download of SPV blocks from blockcain...");
+        peerGroup.downloadBlockChain();
+        Log.d(TAG, "Completed SPV block download.");
+
+        try {
+            this.wallet.saveToFile(this.walletFile);
+            Log.d(TAG, "Saved wallet file");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String sendTransaction(String address, String amount) {
@@ -329,7 +347,27 @@ public class BitcoinService {
     }
 
     public Coin getBalance() {
-        return this.wallet.getBalance();
+        return wallet.getBalance();
+    }
+
+    public Coin getBalanceEstimated() {
+        return wallet.getBalance(Wallet.BalanceType.ESTIMATED);
+    }
+
+    public Coin getWatchedBalance() {
+        return wallet.getWatchedBalance();
+    }
+
+    public int getVersion() {
+        return wallet.getVersion();
+    }
+
+    public String getDescription() {
+        return wallet.getDescription();
+    }
+
+    public Set<Transaction> getTransactions(Boolean includeDead) {
+        return wallet.getTransactions(includeDead);
     }
 
     public String getMnemonic() {

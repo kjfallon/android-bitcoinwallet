@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.bitcoinj.core.Address;
+import org.bitcoinj.utils.BtcFormat;
 
 import edu.syr.cis.cis444.bitcoinwallet.MainActivity;
 import edu.syr.cis.cis444.bitcoinwallet.OttoEventBus;
@@ -27,13 +28,15 @@ public class SendBtcFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_send_btc, container, false);
-        addressEdit   = (EditText) view.findViewById(R.id.editTextAddress);
+        addressEdit = (EditText) view.findViewById(R.id.editTextAddress);
         addressEdit.setText(((MainActivity) this.getActivity()).getBTCService().currentReceiveAddress().toString());
-        amountEdit   = (EditText) view.findViewById(R.id.editTextAmount);
+        amountEdit = (EditText) view.findViewById(R.id.editTextAmount);
         amountEdit.setText("0.05");
-        TextView walletView = (TextView) view.findViewById(R.id.textViewBalance);
+
         Log.d(TAG, "displaying wallet content");
-        walletView.setText("Wallet Balance: " + ((MainActivity)this.getActivity()).getBTCService().getBalance() + " btc");
+        BtcFormat f = BtcFormat.getInstance();
+        TextView walletView = (TextView) view.findViewById(R.id.textViewBalance);
+        walletView.setText("Wallet Balance: " + f.format(((MainActivity)this.getActivity()).getBTCService().getBalance()) );
 
         Button sendButton = (Button) view.findViewById(R.id.buttonSendTransaction);
         sendButton.setOnClickListener(this);
