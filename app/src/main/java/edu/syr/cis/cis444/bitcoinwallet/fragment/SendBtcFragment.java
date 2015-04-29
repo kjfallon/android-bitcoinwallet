@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.bitcoinj.core.Address;
 import org.bitcoinj.utils.BtcFormat;
@@ -24,21 +25,22 @@ public class SendBtcFragment extends Fragment implements View.OnClickListener{
     public static Context context;
     EditText addressEdit;
     EditText amountEdit;
+    TextView walletView;
+    BtcFormat btcFormat = BtcFormat.getInstance();
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.fragment_send_btc, container, false);
+        view = inflater.inflate(R.layout.fragment_send_btc, container, false);
         addressEdit = (EditText) view.findViewById(R.id.editTextAddress);
-        //addressEdit.setText(((MainActivity) this.getActivity()).getBTCService().currentReceiveAddress().toString());
-        // default to address in external test wallet
-        addressEdit.setText("mp14qMPpZuZfGezMTT9o1YF9n3aaEUz1zs");
+        addressEdit.setText("n3hRBqByW5CapsquwDGgkPnSdLH3iUmWBG");
+
         amountEdit = (EditText) view.findViewById(R.id.editTextAmount);
-        amountEdit.setText("0.05");
+        amountEdit.setText("0.0");
 
         Log.d(TAG, "displaying wallet content");
-        BtcFormat f = BtcFormat.getInstance();
-        TextView walletView = (TextView) view.findViewById(R.id.textViewBalance);
-        walletView.setText("Wallet Balance: " + f.format(((MainActivity)this.getActivity()).getBTCService().getBalance()) );
+        walletView = (TextView) view.findViewById(R.id.textViewBalance);
+        walletView.setText("Wallet Balance: " + btcFormat.format(((MainActivity)this.getActivity()).getBTCService().getBalanceEstimated()) );
 
         Button sendButton = (Button) view.findViewById(R.id.buttonSendTransaction);
         sendButton.setOnClickListener(this);
@@ -71,9 +73,28 @@ public class SendBtcFragment extends Fragment implements View.OnClickListener{
 
     /** Called when the user clicks the Send BTC button in the send BTC fragment*/
     public void sendTransaction() {
+
         String address = addressEdit.getText().toString();
         String amount = amountEdit.getText().toString();
+
+        Log.d(TAG, "updating amountEdit textview");
+        amountEdit.setText("0.0");
+        Log.d(TAG, "sending transaction start Toast to UI");
+        CharSequence text = "Sending your transaction";
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(((MainActivity)this.getActivity()).getApplicationContext(), text, duration);
+        toast.show();
+        // performing transaction
+        Log.d(TAG, "invoking sendTransactions on btcService");
         String sendResult = ((MainActivity)this.getActivity()).getBTCService().sendTransaction(address, amount);
+        // updating UI
+        Log.d(TAG, "displaying wallet content");
+        walletView = (TextView) view.findViewById(R.id.textViewBalance);
+        walletView.setText("Wallet Balance: " + btcFormat.format(((MainActivity)this.getActivity()).getBTCService().getBalanceEstimated()) );
+        Log.d(TAG, "sending update complete Toast to UI");
+        text = "Sending transaction complete";
+        toast = Toast.makeText(((MainActivity)this.getActivity()).getApplicationContext(), text, duration);
+        toast.show();
         Log.d(TAG, sendResult);
     }
 }

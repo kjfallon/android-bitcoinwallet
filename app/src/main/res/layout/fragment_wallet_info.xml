@@ -52,28 +52,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
-        android:id="@+id/textViewWalletBalanceEstimated"
-        android:layout_below="@+id/textViewWalletVersion"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textViewWalletBalanceWatched"
-        android:layout_below="@+id/textViewWalletBalanceEstimated"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
         android:id="@+id/textViewWalletTransactionCount"
-        android:layout_below="@+id/textViewWalletBalanceWatched"
+        android:layout_below="@+id/textViewWalletVersion"
         android:layout_alignParentStart="true"
         android:layout_marginTop="12dp" />
 

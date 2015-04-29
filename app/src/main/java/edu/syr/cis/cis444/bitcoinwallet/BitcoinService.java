@@ -25,6 +25,7 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
+import org.bitcoinj.core.PeerAddress;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.Wallet;
@@ -39,6 +40,8 @@ import org.bitcoinj.wallet.DeterministicSeed;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -225,7 +228,13 @@ public class BitcoinService {
                 Log.d(TAG, peerCount + " peers, lost peer: " + peer.getAddress());
             }
         });
-
+/*          InetAddress localPeer = null;
+          try {
+              localPeer = InetAddress.getByName("192.168.1.66");
+          } catch (UnknownHostException e) {
+              e.printStackTrace();
+          }
+        peerGroup.addAddress(new PeerAddress(localPeer, btcNetParams.getPort() ) );*/
         peerGroup.addPeerDiscovery(new DnsDiscovery(btcNetParams));
         peerGroup.startAsync();
 

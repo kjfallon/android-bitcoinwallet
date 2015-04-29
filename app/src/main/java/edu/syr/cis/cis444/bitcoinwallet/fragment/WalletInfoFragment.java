@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.otto.Subscribe;
+
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.utils.BtcFormat;
 
@@ -19,24 +21,33 @@ import java.util.Set;
 import edu.syr.cis.cis444.bitcoinwallet.MainActivity;
 import edu.syr.cis.cis444.bitcoinwallet.OttoEventBus;
 import edu.syr.cis.cis444.bitcoinwallet.R;
+import edu.syr.cis.cis444.bitcoinwallet.event.BlockChainUpdateCompleteEvent;
+import edu.syr.cis.cis444.bitcoinwallet.task.RefreshBlockchainTask;
+
+import static android.widget.ImageView.ScaleType.CENTER_INSIDE;
 
 
 public class WalletInfoFragment extends Fragment {
 
     private static final String TAG = WalletInfoFragment.class.getSimpleName();
     public static Context context;
+    private static RefreshBlockchainTask refreshBlockchainTask;
+    BtcFormat btcFormat = BtcFormat.getInstance();
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
 
+        // submit update from global blockchain task to bus
         CharSequence text = "Refreshing wallet from network";
         int duration = Toast.LENGTH_LONG;
         Toast toast = Toast.makeText(((MainActivity)this.getActivity()).getApplicationContext(), text, duration);
         toast.show();
-        ((MainActivity)this.getActivity()).getBTCService().updateWalletFromNetwork();
+        Log.d(TAG, "submitting RefreshBlockchainTask to bus");
+        refreshBlockchainTask = new RefreshBlockchainTask( );
+        refreshBlockchainTask.execute( ((MainActivity)this.getActivity()) );
 
-        View view = inflater.inflate(R.layout.fragment_wallet_info, container, false);
-        BtcFormat f = BtcFormat.getInstance();
+        view = inflater.inflate(R.layout.fragment_wallet_info, container, false);
 
         Log.d(TAG, "displaying wallet description");
         TextView walletDescription = (TextView) view.findViewById(R.id.textViewWalletDescription);
@@ -48,15 +59,7 @@ public class WalletInfoFragment extends Fragment {
 
         Log.d(TAG, "displaying wallet balance");
         TextView walletBalance = (TextView) view.findViewById(R.id.textViewWalletBalance);
-        walletBalance.setText("Wallet Balance: " + f.format(((MainActivity)this.getActivity()).getBTCService().getBalance()) );
-
-        Log.d(TAG, "displaying estimated wallet balance");
-        TextView walletBalanceEstimated = (TextView) view.findViewById(R.id.textViewWalletBalanceEstimated);
-        walletBalanceEstimated.setText("Wallet estimated Balance: " + f.format(((MainActivity)this.getActivity()).getBTCService().getBalanceEstimated()) );
-
-        Log.d(TAG, "displaying watched wallet balance");
-        TextView walletBalanceWatched = (TextView) view.findViewById(R.id.textViewWalletBalanceWatched);
-        walletBalanceWatched.setText("Wallet watched Balance: " + f.format(((MainActivity)this.getActivity()).getBTCService().getWatchedBalance()) );
+        walletBalance.setText("Wallet Balance: " + btcFormat.format(((MainActivity)this.getActivity()).getBTCService().getBalanceEstimated()) );
 
         Log.d(TAG, "displaying wallet transaction count");
         TextView walletTxCount = (TextView) view.findViewById(R.id.textViewWalletTransactionCount);
@@ -73,6 +76,17 @@ public class WalletInfoFragment extends Fragment {
         walletTx.setText(transactionList);
 
         return view;
+    }
+
+    @Subscribe
+    public void onBlockChainUpdateComplete(BlockChainUpdateCompleteEvent event) {
+        Log.d(TAG, "completed updating from the blockchain");
+        TextView walletBalance = (TextView) view.findViewById(R.id.textViewWalletBalance);
+        walletBalance.setText("Wallet Balance: " + btcFormat.format(((MainActivity) this.getActivity()).getBTCService().getBalance()));
+        CharSequence text = "Wallet update complete";
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(((MainActivity)this.getActivity()).getApplicationContext(), text, duration);
+        toast.show();
     }
 
     @Override

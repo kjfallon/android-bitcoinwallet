@@ -17,6 +17,6 @@
     <string name="title_activity_main_activity2">MainActivity2Activity</string>
     <string name="label_send_address">Send to Address</string>
     <string name="label_send_amount">Bitcoin amount</string>
-    <string name="description_recovery">Your wallet is hierarchical and deterministic.  This means that the entire contents of your wallet can be recreated from your mnemonic code.  When your wallet was created 128 bits of random entropy were used to generate a mnemonic code consisting of 12 words (as specified by the BIP 39 standard).  These 12 words are used as input to a key derivation algorithm (PBKDF2) and iterated numerous times to obtain the seed used to create a tree of keys (as specified by the BIP 32 standard).  These keys are what your wallet consists of.  Please write this down in case your device or wallet is lost or damaged.</string>
+    <string name="description_recovery">Your wallet is hierarchical and deterministic.  This means that the entire contents of your wallet can be recreated from your mnemonic code.  Please write this down in case your device or wallet is lost or damaged.</string>
     <string name="title_recovery">Write down your recovery mnemonic:</string>
 </resources>
