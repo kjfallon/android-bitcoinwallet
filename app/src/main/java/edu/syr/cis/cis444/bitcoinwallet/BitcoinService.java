@@ -36,6 +36,8 @@ import org.bitcoinj.store.BlockStore;
 import org.bitcoinj.store.BlockStoreException;
 import org.bitcoinj.store.SPVBlockStore;
 import org.bitcoinj.store.UnreadableWalletException;
+import org.bitcoinj.uri.BitcoinURI;
+import org.bitcoinj.uri.BitcoinURIParseException;
 import org.bitcoinj.wallet.DeterministicSeed;
 
 import java.io.File;
@@ -346,6 +348,18 @@ public class BitcoinService {
         Log.d(TAG, "created key: " + key);
 
         return key;
+    }
+
+    public BitcoinURI createBitcoinURI (String url) {
+        BitcoinURI uri = null;
+        try {
+            uri = new BitcoinURI(btcNetParams, url);
+        } catch (BitcoinURIParseException e) {
+            Log.e(TAG,"unable to create bitcoin uri");
+            e.printStackTrace();
+        }
+
+        return uri;
     }
 
     public void printKey(ECKey key) {

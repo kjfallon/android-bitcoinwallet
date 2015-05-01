@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/label_send_address"
         android:id="@+id/textViewAddress"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -24,7 +24,7 @@
         android:id="@+id/editTextAddress"
         android:layout_below="@+id/textViewAddress"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
         android:id="@+id/textViewAmount"
         android:layout_below="@+id/editTextAddress"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="20dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -43,6 +43,24 @@
         android:ems="10"
         android:id="@+id/editTextAmount"
         android:layout_below="@+id/textViewAmount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_send_btc"
+        android:id="@+id/buttonSendTransaction"
+        android:layout_below="@+id/editTextAmount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan QR"
+        android:id="@+id/buttonScanQR"
+        android:layout_below="@+id/buttonSendTransaction"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
@@ -53,7 +71,7 @@
         android:id="@+id/textViewBalance"
         android:layout_above="@+id/button7"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp" />
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -65,13 +83,6 @@
         android:layout_marginBottom="18dp"
         android:onClick="mainMenu" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_send_btc"
-        android:id="@+id/buttonSendTransaction"
-        android:layout_below="@+id/editTextAmount"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp" />
+
 
 </RelativeLayout>
