@@ -76,6 +76,18 @@ public class MainActivity extends Activity {
         return btcService;
     }
 
+    /** Exists as placeholder to display the main menu UI **/
+    public static class PlaceholderFragment extends Fragment {
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_main_activity, container, false);
+        }
+    }
+
     /** Called when the user clicks the Wallet Balance button */
     public void viewWalletBalance(View view) {
         getFragmentManager().beginTransaction()
@@ -118,16 +130,6 @@ public class MainActivity extends Activity {
                 .commit();
     }
 
-    /** Exists as placeholder to display the main menu UI **/
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_main_activity, container, false);
-        }
-    }
 
 }

@@ -53,7 +53,8 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
         freshAddressString = freshAddress.toString();
         receiveAddrView.setText("Send BTC to: " + freshAddressString);
         amountEdit = (EditText) view.findViewById(R.id.editTextReceiveAmount);
-        amountEdit.setText("0.05");
+        receiveBtcAmount = "0.05";
+        amountEdit.setText(receiveBtcAmount);
         receiveUriView = (TextView) view.findViewById(R.id.textViewReceiveUri);
         Button sendButton = (Button) view.findViewById(R.id.buttonUpdateReceiveQR);
         sendButton.setOnClickListener(this);
@@ -62,7 +63,7 @@ public class ReceiveBtcFragment extends Fragment implements View.OnClickListener
         // submit QR code creation task to bus
         Log.d(TAG, "submitting CreateQrTask to bus");
         createQrTask = new CreateQrTask();
-        createQrTask.execute(freshAddressString,"");
+        createQrTask.execute(freshAddressString,receiveBtcAmount);
 
         return view;
     }

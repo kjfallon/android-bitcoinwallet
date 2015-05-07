@@ -101,7 +101,7 @@ public class SendBtcFragment extends Fragment implements View.OnClickListener{
                     addressEdit.setText(sendToAddress);
                     long satoshis = bitcoinUri.getAmount().getValue();
                     double btc = ((double)satoshis/100000000L);
-                    Log.d(TAG, "Requested about as a double btc: " + btc);
+                    Log.d(TAG, "Requested amout as a double btc: " + btc);
                     amountToSend = Double.toString(btc);
                     amountEdit.setText(amountToSend);
                 }
